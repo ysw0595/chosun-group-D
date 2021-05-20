@@ -1,0 +1,46 @@
+#include <Servo.h>
+
+// 출력핀(trig)과 입력핀(echo) 연결 설정, 다른 핀을 연결해도 됨
+int trigPin = 2; int echoPin = 3;
+// 시리얼 속도 설정, trigPin을 출력, echoPin을 입력으로 설정
+
+Servo myServo; // 서보모터를 제어하기 위한 서보 객체의 생성
+// 대부분의 보드에서 서보 객체를 12개까지 생성할 수 있음
+int angle = 90; // 서보 위치(각도)를 저장하기 위한 변수
+
+
+void setup() {
+Serial.begin(9600);
+pinMode(trigPin, OUTPUT); // 출력 핀으로 설정
+pinMode(echoPin, INPUT); // 신호를 받는 핀 입력 설정
+myServo.attach(12); // 핀 12번에 연결된 서보를 서보 객체에 배속시
+}
+
+void servo(){
+
+
+}
+void loop() {
+float duration, distance;
+digitalWrite(trigPin, HIGH); delay(10);
+digitalWrite(trigPin, LOW);
+// echoPin이 HIGH를 유지한 시간을 저장
+duration = pulseIn(echoPin, HIGH);
+// HIGH일 때 초음파가 보냈다가 돌아오는 시간을 가지고 거리를 계산
+// 340은 초당 소리의 속도이고 10000은 밀리세컨드를 세컨드로, 
+distance = ((float)(340 * duration) / 10000) / 2;
+// 시리얼모니터에 Echo가 HIGH인 시간 및 거I리를 표시
+
+if(distance > 0 & distance <15 )
+{
+  Serial.print(distance);
+  Serial.println("cm\n"); 
+  for (angle = 0; angle <= 180; angle += 1) { // 0도에서 180도로 1도씩 이동
+  myServo.write(angle); // pos가 가진 각도의 위치로 이동
+  delay(5); // 서보가 해당 위치에 도달할 때까지 15ms 대기
+  }
+
+
+}
+delay(500);
+}
