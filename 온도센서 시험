@@ -1,0 +1,89 @@
+unsigned char buffer_Lo, buffer_Hi, p02; //1byte선언
+
+
+long CHECK(unsigned char datum) //2byte return 함수
+
+{
+  
+    unsigned char i= 0;
+    buffer Lo = 0; //버퍼 비워주기
+    buffer Hi = 0; //버퍼 비워주기
+ 
+
+    /*** 적외선 준비 설정 ***/
+    EN_LOW; //enable low
+    delay us(10); //10us 딜레이
+    for(i=0; i<8; ++i)
+    {
+        if( ( (0x80 >> i ) & datum) == 0)
+        {
+            SDO_LOW; //SDO = 0;
+        }
+        else
+        {
+            SDO_HIGH; //SDO = 1;
+        }
+
+}
+
+SDO_LOW; //SDO = 0;
+delay_ms(10); //10ms 딜레이
+/*** 하위 바이트 읽기 ***/
+for(i=0; i<8; I++)
+{
+        buffer_Lo = buffer_Lo << 1; //하위 버퍼 좌로 한비트 밀기
+        SCK_LOW; //SCK = 0;
+        delay_us(1); //1us 딜레이
+        SCK_HIGH; //SCK = 1;
+        dealy_us(1); //1us 딜레이
+        p02 = FP02 //포트의 상태 읽기
+        if(p02 == 1)
+        {
+            buffer_Lo = buffer_Lo|0x01;}
+        }
+        else
+        {
+            buffer_Lo = buffer_Lo&0xFE;
+         }
+}
+SDO_LOW; //SDO = 0;
+delay_ms(10); //10ms 딜레이
+
+/*** 상위 바이트 읽기 ***/
+
+for(i=0; i<8; i++)
+{
+     buffer_Hi = buffer_Hi << 1; //상위 버퍼 좌로 한비트 밀기
+     SCK_LOW; //SCK = 0;
+     delay_us(1); //1us 딜레이
+     SCK_HIGH; //SCK = 1;
+     dealy_us(1); //1us 딜레이
+     p02 = FP02 //포트의 상태를 변수에 담아서 판단
+     if(p02 == 1)
+     {
+         buffer_Hi = buffer_Hi|0x01;}
+     }
+     else
+     {
+         buffer_Lo = buffer_Lo&0xFE;
+     }
+}
+EN_HIGH; //enable = 1;
+return (buffer_Hi*256 + buffer_Lo);
+
+}
+
+ 
+
+void main(void)
+{
+    while(1)
+    {
+        Target_Value = CHECK(0xa0); // 대상 온도
+        delay_ms(50);
+         Ambient_Value = CHECK(0xa0); // 주변 온도
+        delay_ms(500);
+        //LCD에 값 출력 코드 넣기
+    }
+
+}
