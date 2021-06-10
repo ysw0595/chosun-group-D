@@ -9,17 +9,20 @@ RtcDS1302<ThreeWire> Rtc(myWire);
 
 #define SS_PIN 53
 #define RST_PIN 5
- 
+
 const int chipSelect = 3;
 MFRC522 rfid(SS_PIN, RST_PIN); 
 MFRC522::MIFARE_Key key; 
 byte nuidPICC[4];
- 
+int speak = 9;
+int melody = 440;
+
 void setup() { 
   Serial.begin(9600);
   SPI.begin(); // Init SPI bus
-  rfid.PCD_Init(); // Init MFRC522 
- 
+  rfid.PCD_Init(); // Init MFRC522
+  pinMode(speak,OUTPUT);
+
   for (byte i = 0; i < 6; i++) {
     key.keyByte[i] = 0xFF;
   }
@@ -55,6 +58,8 @@ void loop() {
     for (byte i = 0; i < 4; i++) {
       nuidPICC[i] = rfid.uid.uidByte[i];
     }
+    tone(speak, melody);
+    
     Serial.print(F("In hex: "));
     printHex(rfid.uid.uidByte, rfid.uid.size);
     Serial.println();
