@@ -58,7 +58,7 @@ void loop() {
     for (byte i = 0; i < 4; i++) {
       nuidPICC[i] = rfid.uid.uidByte[i];
     }
-    tone(speak, melody);
+    tone(speak, melody, 100);
     
     Serial.print(F("In hex: "));
     printHex(rfid.uid.uidByte, rfid.uid.size);
