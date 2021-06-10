@@ -18,6 +18,7 @@ int speak = 9;
 int melody = 440;
 
 void setup() { 
+  tone(speak, 493.8833, 100);
   Serial.begin(9600);
   SPI.begin(); // Init SPI bus
   rfid.PCD_Init(); // Init MFRC522
@@ -34,6 +35,7 @@ void setup() {
     while(1);
   }
   Serial.println("card initialized.");
+  tone(speak, 493.8833, 100);
 }
  
 void loop() {
